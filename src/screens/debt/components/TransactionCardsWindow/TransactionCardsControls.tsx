@@ -1,6 +1,5 @@
 import { useAtom, useSetAtom } from "jotai";
 import { type Transaction, debtsAtom } from "~/atoms/debtsAtom";
-import { Tooltip } from "react-tooltip";
 import { SecondaryButton } from "~/components/buttons";
 import { excludeModeAtom } from "../../atoms/excludeModeAtom";
 

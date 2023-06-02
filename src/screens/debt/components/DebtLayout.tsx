@@ -2,7 +2,6 @@ import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useAtom } from "jotai";
 import { useRouter } from "next/router";
 import type { ReactNode } from "react";
-import { Tooltip } from "react-tooltip";
 import { IconButton } from "~/components/buttons";
 import { SearchHeader } from "~/components/headers";
 import { noteQueryAtom } from "../atoms/noteQueryAtom";

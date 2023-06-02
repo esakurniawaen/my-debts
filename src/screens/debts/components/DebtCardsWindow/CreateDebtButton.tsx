@@ -6,7 +6,6 @@ import { debtDefaultCurrencyAtom } from "~/atoms/debtDefaultCurrencyAtom";
 import { PrimaryButton } from "~/components/buttons";
 import { debtFormAtom } from "~/screens/debts/atoms/debtFormAtom";
 import { debtCategoriesToFilterAtom } from "../../atoms/debtCategoriesToFilterAtom";
-import { Tooltip } from "react-tooltip";
 
 const CreateDebtButton = () => {
   const defaultCurrency = useAtomValue(debtDefaultCurrencyAtom);

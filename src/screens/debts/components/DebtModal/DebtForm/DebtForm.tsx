@@ -1,4 +1,4 @@
-import { forwardRef, useState, type FormEvent } from "react";
+import { forwardRef,  type FormEvent } from "react";
 import { useMap } from "react-use";
 import type { Debt } from "~/atoms/debtsAtom";
 import Label from "~/components/Label";

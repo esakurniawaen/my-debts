@@ -2,7 +2,6 @@ import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useAtom, useAtomValue } from "jotai";
 import { useState, type ReactNode } from "react";
 import Sidebar from "~/components/Sidebar";
-import { Tooltip } from "react-tooltip";
 import { IconButton } from "~/components/buttons";
 import { SearchHeader } from "~/components/headers";
 import { debtCategoriesToFilterAtom } from "../atoms/debtCategoriesToFilterAtom";
