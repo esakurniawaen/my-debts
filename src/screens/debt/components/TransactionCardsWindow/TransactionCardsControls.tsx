@@ -37,7 +37,7 @@ export default function TransactionCardsControls({
           transaction.exclude ? { ...transaction, exclude: false } : transaction
         )
       );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -64,7 +64,7 @@ export default function TransactionCardsControls({
           onClick={() => onExcludeModeChange(true)}
           size="SMALL"
           data-tooltip-id="tooltip"
-          data-tooltip-content="And select some transaction(s) to exclude"
+          data-tooltip-content="Then select some transaction(s) to exclude"
           data-tooltip-place="bottom"
         >
           <svg

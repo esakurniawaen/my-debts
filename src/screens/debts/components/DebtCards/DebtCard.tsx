@@ -18,7 +18,7 @@ const DebtCard = ({ nameQuery, debt, onDelete, onEdit }: DebtCardProps) => {
 
   return (
     <article className="relative flex h-fit cursor-pointer items-center justify-between rounded-lg bg-slate-900/50 py-3 pl-4 pr-0 shadow-lg transition hover:bg-slate-900 hover:shadow-xl">
-      <div className="w-5/6">
+      <div>
         <Link href={`/debts/${debt.id}`}>
           <h3>
             <Highlighter
@@ -36,7 +36,7 @@ const DebtCard = ({ nameQuery, debt, onDelete, onEdit }: DebtCardProps) => {
 
         <ul
           className={clsx(
-            "mt-1 grid list-inside list-[circle] gap-0.5 text-xs",
+            "mt-1 grid list-inside list-[circle] gap-0.5",
             {
               "marker:text-yellow-400": cardColor === "YELLOW",
               "marker:text-lime-400": cardColor === "LIME",

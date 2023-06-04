@@ -5,7 +5,6 @@ import CardMenu from "~/components/selects/CardMenu";
 import CurrencyText from "../../../CurrencyText";
 import ExcludeTransactionCheckbox from "./ExcludeTransactionCheckbox";
 import TransactionDetails from "./TransactionDetails";
-import { capitalizeFirstWord } from "~/utils";
 
 interface TransactionCardProps {
   transaction: Transaction;
