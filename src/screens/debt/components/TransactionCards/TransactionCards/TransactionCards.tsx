@@ -1,32 +1,32 @@
-import { Switch } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
-import { useAtomValue, useSetAtom } from "jotai";
-import { useEffect } from "react";
+import { useSetAtom } from "jotai";
+import { useState } from "react";
 import {
   deleteTransactionAtom,
-  updateAllTransactionsAtom,
   updateTransactionAtom,
   type Debt,
+  type NoninitialTransaction,
 } from "~/atoms/debtsAtom";
 import Grid from "~/components/Grid";
-import { excludeModeAtom } from "~/screens/debt/atoms/excludeModeAtom";
-import { transactionFormAtom } from "~/screens/debt/atoms/transactionFormAtom";
 import useSearchTransactions from "../../../hooks/useSearchTransactions";
-import { getTransactionCategory } from "../../../utils";
-import TransactionCard from "./TransactionCard";
+import TransactionCardsWindow from "../../TransactionCardsWindow/TransactionCardsWindow";
+import { type TransactionFormState } from "../../TransactionModal/TransactionForm";
+import TransactionCard from "./TransactionCard/TransactionCard";
 
 interface TransactionCardsProps {
   debt: Debt;
+  noteQuery: string;
+  onFormStateChange: (formState: TransactionFormState) => void;
 }
 
-const TransactionCards = ({ debt }: TransactionCardsProps) => {
-  const setTransactionForm = useSetAtom(transactionFormAtom);
+const TransactionCards = ({
+  debt,
+  noteQuery,
+  onFormStateChange,
+}: TransactionCardsProps) => {
   const deleteTransaction = useSetAtom(deleteTransactionAtom);
   const updateTransaction = useSetAtom(updateTransactionAtom);
-  const updateAllTransactions = useSetAtom(updateAllTransactionsAtom);
 
-  const excludeMode = useAtomValue(excludeModeAtom);
+  const [excludeMode, setExcludeMode] = useState(false);
 
   const handleDeleteTransaction = (transactionId: string) => {
     const proceed = confirm("Delete transaction forever?");
@@ -35,72 +35,39 @@ const TransactionCards = ({ debt }: TransactionCardsProps) => {
     deleteTransaction(debt.id, transactionId);
   };
 
-  useEffect(() => {
-    return () =>
-      updateAllTransactions(
-        debt.id,
-        debt.transactions.map((transaction) =>
-          transaction.exclude === true
-            ? { ...transaction, exclude: false }
-            : transaction
-        )
-      );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const { searchedTransactions, hasSearchedTransactionsBeenFound } =
-    useSearchTransactions(debt.transactions);
+    useSearchTransactions(debt.transactions, noteQuery);
 
   return (
-    <>
+    <TransactionCardsWindow
+      debtId={debt.id}
+      transactions={debt.transactions}
+      excludeMode={excludeMode}
+      onExcludeModeChange={setExcludeMode}
+    >
       {hasSearchedTransactionsBeenFound ? (
         <Grid>
           {searchedTransactions.map((transaction) => (
-            <article
+            <TransactionCard
+              excludeMode={excludeMode}
+              noteQuery={noteQuery}
               key={transaction.id}
-              className={clsx(
-                excludeMode && "flex items-center gap-x-4 md:gap-x-3"
-              )}
-            >
-              {excludeMode && (
-                <Switch
-                  checked={transaction.exclude}
-                  onChange={() =>
-                    updateTransaction(debt.id, transaction.id, {
-                      exclude: !transaction.exclude,
-                    })
-                  }
-                  className={clsx("h-5 w-5 rounded", {
-                    "bg-blue grid place-items-center": transaction.exclude,
-                    "border  border-slate-700 bg-slate-800":
-                      !transaction.exclude,
-                  })}
-                >
-                  <span className="sr-only">
-                    Exclude this transaction from debt amounts (e.g total debt,
-                    total paid and remaining payment)
-                  </span>
-                  {transaction.exclude && (
-                    <CheckIcon className="h-4 w-4 text-white" />
-                  )}
-                </Switch>
-              )}
-
-              <TransactionCard
-                key={transaction.id}
-                transaction={transaction}
-                debtCurrency={debt.currency}
-                onDelete={() => handleDeleteTransaction(transaction.id)}
-                onEdit={() =>
-                  setTransactionForm({
-                    type: "EDIT",
-                    title: getTransactionCategory(debt.type, transaction.type),
-                    debtId: debt.id,
-                    transaction: transaction,
-                  })
-                }
-              />
-            </article>
+              transaction={transaction}
+              debtCurrency={debt.currency}
+              onDelete={() => handleDeleteTransaction(transaction.id)}
+              onEdit={() =>
+                onFormStateChange({
+                  type: "EDIT",
+                  debt: debt,
+                  transaction: transaction as NoninitialTransaction,
+                })
+              }
+              onExcludeToggle={() =>
+                updateTransaction(debt.id, transaction.id, {
+                  exclude: !transaction.exclude,
+                })
+              }
+            />
           ))}
         </Grid>
       ) : (
@@ -110,7 +77,7 @@ const TransactionCards = ({ debt }: TransactionCardsProps) => {
           </h3>
         </div>
       )}
-    </>
+    </TransactionCardsWindow>
   );
 };
 

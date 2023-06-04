@@ -4,9 +4,14 @@ import Label from "~/components/Label";
 import { PrimaryButton } from "~/components/buttons";
 import { Input, MoneyInput } from "~/components/inputs";
 import { fromDatetimeLocal, toDatetimeLocal } from "~/utils";
-import type { TransactionFormState } from "../../atoms/transactionFormAtom";
 import type { TransactionColor } from "../../types";
-import type { NoninitialTransaction } from "~/atoms/debtsAtom";
+import type { Debt, NoninitialTransaction } from "~/atoms/debtsAtom";
+
+export type TransactionFormState = {
+  type: "ADD" | "EDIT";
+  debt: Debt;
+  transaction: NoninitialTransaction;
+};
 
 interface TransactionFormProps {
   onSubmit: (transaction: NoninitialTransaction) => void;
@@ -50,11 +55,14 @@ const TransactionForm = forwardRef<HTMLInputElement, TransactionFormProps>(
         <div>
           <Label htmlFor="transaction-amount" text="Amount" />
           <MoneyInput
+            prefix={`${formState.debt.currency} `}
             borderColorWhenFocused={formColor}
             onFocus={(e) => e.target.select()}
             value={transactionPreview.amount || undefined}
-            onChange={(value) => setTransactionPreviewField("amount", value ?? 0)}
-            placeholder='0.00'
+            onChange={(value) =>
+              setTransactionPreviewField("amount", value ?? 0)
+            }
+            placeholder="0.00"
             ref={amountInputRef}
             id="transaction-amount"
             required={true}

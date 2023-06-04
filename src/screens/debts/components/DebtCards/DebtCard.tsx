@@ -1,22 +1,19 @@
 import clsx from "clsx";
-import { useAtomValue } from "jotai";
 import { DateTime } from "luxon";
 import Link from "next/link";
 import Highlighter from "react-highlight-words";
 import type { Debt } from "~/atoms/debtsAtom";
 import CardMenu from "~/components/selects/CardMenu";
-import { nameQueryAtom } from "~/screens/debts/atoms/nameQueryAtom";
 import { toDatetimeLocal, toLocaleString } from "~/utils";
 
 interface DebtCardProps {
   debt: Debt;
+  nameQuery: string;
   onDelete: () => void;
   onEdit: () => void;
 }
 
-const DebtCard = ({ debt, onDelete, onEdit }: DebtCardProps) => {
-  const nameQuery = useAtomValue(nameQueryAtom);
-
+const DebtCard = ({ nameQuery, debt, onDelete, onEdit }: DebtCardProps) => {
   const cardColor = debt.type === "LEND" ? "YELLOW" : "LIME";
 
   return (

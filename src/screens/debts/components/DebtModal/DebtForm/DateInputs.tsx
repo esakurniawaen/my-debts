@@ -1,7 +1,7 @@
 import Label from "~/components/Label";
 import { Input } from "~/components/inputs";
-import { DebtColor } from "../../../types";
-import { Debt } from "~/atoms/debtsAtom";
+import type { DebtColor } from "../../../types";
+import type { Debt } from "~/atoms/debtsAtom";
 import { fromDatetimeLocal, toDatetimeLocal } from "~/utils";
 
 interface DateInputsProps {

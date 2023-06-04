@@ -1,4 +1,4 @@
-import { CURRENCIES } from "~/atoms/debtDefaultCurrencyAtom";
+import { CURRENCIES } from "~/atoms/debtDefaultCurrency";
 import { type Debt } from "~/atoms/debtsAtom";
 import Label from "~/components/Label";
 import { MoneyInput, RadioOptions } from "~/components/inputs";

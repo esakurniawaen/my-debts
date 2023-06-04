@@ -1,34 +1,44 @@
-import { useAtom, useSetAtom } from "jotai";
-import { type Transaction, debtsAtom } from "~/atoms/debtsAtom";
+import { useSetAtom } from "jotai";
+import { updateAllTransactionsAtom, type Transaction } from "~/atoms/debtsAtom";
 import { SecondaryButton } from "~/components/buttons";
-import { excludeModeAtom } from "../../atoms/excludeModeAtom";
+import { useEffect } from "react";
 
 type TransactionCardsControlsProps = {
   transactions: Transaction[];
   debtId: string;
+  excludeMode: boolean;
+  onExcludeModeChange: (excludeMode: boolean) => void;
 };
 
 export default function TransactionCardsControls({
   transactions,
   debtId,
+  excludeMode,
+  onExcludeModeChange,
 }: TransactionCardsControlsProps) {
-  const [excludeMode, setExcludeMode] = useAtom(excludeModeAtom);
-  const setDebts = useSetAtom(debtsAtom);
+  const updateAllTransactions = useSetAtom(updateAllTransactionsAtom);
 
   const handleUnexcludeAllTransactions = () => {
-    const unexcludedAllTransactions = transactions.map((transaction) =>
-      transaction.exclude ? { ...transaction, exclude: false } : transaction
-    );
-    setDebts((debts) =>
-      debts.map((debt) =>
-        debt.id === debtId
-          ? { ...debt, transactions: unexcludedAllTransactions }
-          : debt
+    updateAllTransactions(
+      debtId,
+      transactions.map((transaction) =>
+        transaction.exclude ? { ...transaction, exclude: false } : transaction
       )
     );
 
-    setExcludeMode(false);
+    onExcludeModeChange(false);
   };
+
+  useEffect(() => {
+    return () =>
+      updateAllTransactions(
+        debtId,
+        transactions.map((transaction) =>
+          transaction.exclude ? { ...transaction, exclude: false } : transaction
+        )
+      );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex justify-end">
@@ -51,7 +61,7 @@ export default function TransactionCardsControls({
         </SecondaryButton>
       ) : (
         <SecondaryButton
-          onClick={() => setExcludeMode(true)}
+          onClick={() => onExcludeModeChange(true)}
           size="SMALL"
           data-tooltip-id="tooltip"
           data-tooltip-content="And select some transaction(s) to exclude"

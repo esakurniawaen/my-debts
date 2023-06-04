@@ -1,20 +1,33 @@
 import { Popover } from "@headlessui/react";
 import { FunnelIcon } from "@heroicons/react/24/outline";
-import { useAtom } from "jotai";
+import { type Debt } from "~/atoms/debtsAtom";
 import { SecondaryButton } from "~/components/buttons";
 import { RadioOptions } from "~/components/inputs";
-import {
-  debtCategoriesToFilterAtom,
-  type DebtCategoriesToFilter,
-} from "../../atoms/debtCategoriesToFilterAtom";
+import { type DebtColor } from "../../types";
 
-const DebtCardsFilter = () => {
-  const [debtCategoriesToFilter, setDebtCategoriesToFilter] = useAtom(
-    debtCategoriesToFilterAtom
-  );
-  const radioColorWhenSelected =
-    debtCategoriesToFilter.type === "LEND" ? "YELLOW" : "LIME";
+export type DebtCategoriesToFilter = {
+  type: Debt["type"];
+  date: "ACTIVE" | "DUE";
+  payment: "ACTIVE" | "PAID_OFF";
+};
 
+interface DebtCardsFilterProps {
+  radioColorWhenSelected: DebtColor;
+  dateToFilter: DebtCategoriesToFilter["date"];
+  paymentToFilter: DebtCategoriesToFilter["payment"];
+  onDateToFilterChange: (dateToFilter: DebtCategoriesToFilter["date"]) => void;
+  onPaymentToFilterChange: (
+    paymentToFilter: DebtCategoriesToFilter["payment"]
+  ) => void;
+}
+
+const DebtCardsFilter = ({
+  radioColorWhenSelected,
+  dateToFilter,
+  paymentToFilter,
+  onDateToFilterChange,
+  onPaymentToFilterChange,
+}: DebtCardsFilterProps) => {
   return (
     <Popover className="relative">
       <Popover.Button as={SecondaryButton} size="SMALL">
@@ -25,48 +38,19 @@ const DebtCardsFilter = () => {
       <Popover.Panel className="absolute right-0 z-40 mt-4 max-h-80 overflow-y-auto rounded-lg bg-slate-800 p-4 shadow-md backdrop-blur-md">
         <div className="flex flex-col gap-6 md:flex-row">
           <RadioOptions
-            options={["Yes", "No"]}
-            label="Paid off"
-            onSelectedOptionChange={(paidoffStatus) =>
-              setDebtCategoriesToFilter({
-                ...debtCategoriesToFilter,
-                paidoff: paidoffStatus === "Yes" ? true : false,
-              })
+            options={["ACTIVE", "PAID_OFF"]}
+            label="Payment"
+            onSelectedOptionChange={(payment) =>
+              onPaymentToFilterChange(payment)
             }
-            selectedOption={debtCategoriesToFilter.paidoff ? "Yes" : "No"}
+            selectedOption={paymentToFilter}
             radioColorWhenSelected={radioColorWhenSelected}
           />
           <RadioOptions
-            options={["Yes", "No"]}
-            label="Overdue"
-            onSelectedOptionChange={(dueStatus) =>
-              setDebtCategoriesToFilter({
-                ...debtCategoriesToFilter,
-                overdue: dueStatus === "Yes" ? true : false,
-              })
-            }
-            selectedOption={debtCategoriesToFilter.overdue ? "Yes" : "No"}
-            radioColorWhenSelected={radioColorWhenSelected}
-          />
-          <RadioOptions
-            options={
-              [
-                "NEWEST",
-                "OLDEST",
-                "ASCENDING",
-                "DESCENDING",
-                "HIGHEST_REMAINING_TO_PAY",
-                "LOWEST_REMAINING_TO_PAY",
-              ] as DebtCategoriesToFilter["sortBy"][]
-            }
-            label="Sort by"
-            onSelectedOptionChange={(sortBy) =>
-              setDebtCategoriesToFilter({
-                ...debtCategoriesToFilter,
-                sortBy,
-              })
-            }
-            selectedOption={debtCategoriesToFilter.sortBy}
+            options={["ACTIVE", "DUE"]}
+            label="Date"
+            onSelectedOptionChange={(date) => onDateToFilterChange(date)}
+            selectedOption={dateToFilter}
             radioColorWhenSelected={radioColorWhenSelected}
           />
         </div>

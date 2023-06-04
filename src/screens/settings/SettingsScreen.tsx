@@ -8,7 +8,7 @@ import { useAtom } from "jotai";
 import {
   debtDefaultCurrencyAtom,
   CURRENCIES,
-} from "~/atoms/debtDefaultCurrencyAtom";
+} from "~/atoms/debtDefaultCurrency";
 
 const SettingsScreen = () => {
   const router = useRouter();

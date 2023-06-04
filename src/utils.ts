@@ -10,7 +10,7 @@ export const capitalizeWords = (text: string) => {
 
 export const capitalizeFirstWord = (text: string) => {
   return text.charAt(0).toUpperCase() + text.slice(1);
-}
+};
 
 export const toDatetimeLocal = (datetimeInUnix: number) => {
   return DateTime.fromMillis(datetimeInUnix).toFormat("yyyy-MM-dd'T'HH:mm");
@@ -26,7 +26,3 @@ export const toLocaleString = (
 ) => {
   return DateTime.fromMillis(datetimeInUnix).toLocaleString(datetimeFormat);
 };
-
-export const convertConstantCaseToLowercaseSeperatedWithSpaces = (str: string) => {
-  return str.replaceAll('_', ' ').toLocaleLowerCase()
-}

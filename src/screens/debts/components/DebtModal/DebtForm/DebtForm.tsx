@@ -4,11 +4,14 @@ import type { Debt } from "~/atoms/debtsAtom";
 import Label from "~/components/Label";
 import { PrimaryButton } from "~/components/buttons";
 import { Input } from "~/components/inputs";
-import type { DebtFormState } from "../../../atoms/debtFormAtom";
 import DateInputs from "./DateInputs";
 import DebtDetailInputs from "./DebtDetailInputs";
 import PersonDetailInputs from "./PersonDetailInputs";
 
+export type DebtFormState = {
+  type: "ADD" | "EDIT";
+  debt: Debt;
+};
 interface DebtFormProps {
   formState: DebtFormState;
   onSubmit: (debt: Debt) => void;
@@ -27,9 +30,7 @@ const DebtForm = forwardRef<HTMLInputElement, DebtFormProps>(
       !debtPreview.transactions[0]?.amount || debtPreview.personName === "";
 
     const formColor = debtPreview.type === "LEND" ? "YELLOW" : "LIME";
-
-    console.log(debtPreview.transactions[0]?.amount);
-
+    
     return (
       <form
         onSubmit={handleDebtSubmit}

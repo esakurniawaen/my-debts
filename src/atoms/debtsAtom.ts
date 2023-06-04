@@ -1,7 +1,5 @@
-
-
 import { atom } from "jotai";
-import type { Currency } from "./debtDefaultCurrencyAtom";
+import type { Currency } from "./debtDefaultCurrency";
 import { atomWithStorage } from "jotai/utils";
 
 export type Debt = {
@@ -81,13 +79,13 @@ export const updateTransactionAtom = atom(
     set,
     debtId: string,
     transactionId: string,
-    fieldsToUpdate: Partial<Omit<Transaction, 'id' | 'type'>>
+    fieldsToUpdate: Partial<Omit<Transaction, "id" | "type">>
   ) => {
     const updatedTransactionInSelectedDebt = get(debtsAtom).map((debt) =>
       debt.id === debtId
         ? {
             ...debt,
-            transactions:  debt.transactions.map((transaction) =>
+            transactions: debt.transactions.map((transaction) =>
               transaction.id === transactionId
                 ? { ...transaction, ...fieldsToUpdate }
                 : transaction

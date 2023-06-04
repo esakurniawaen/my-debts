@@ -1,37 +1,38 @@
 import { Dialog } from "@headlessui/react";
-import { useAtom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { useRef } from "react";
 import { addDebtAtom, updateDebtAtom, type Debt } from "~/atoms/debtsAtom";
-import { debtFormAtom } from "../../atoms/debtFormAtom";
 import DebtForm from "./DebtForm";
+import type { DebtFormState } from "./DebtForm/DebtForm";
 
-const DebtModal = () => {
-  const [debtForm, setDebtForm] = useAtom(debtFormAtom);
+interface DebtModalProps {
+  formState: DebtFormState | null;
+  onClose: () => void;
+}
 
+const DebtModal = ({ formState, onClose }: DebtModalProps) => {
   const addDebt = useSetAtom(addDebtAtom);
   const updateDebt = useSetAtom(updateDebtAtom);
   const nameInputRef = useRef<HTMLInputElement | null>(null);
 
-  if (!debtForm) return null;
-
   const handleDebtSubmit = (debt: Debt) => {
     if (debt.transactions[0]?.amount === 0) return;
 
-    if (debtForm.type === "ADD") {
+    if (formState?.type === "ADD") {
       addDebt(debt);
     } else {
       updateDebt(debt.id, debt);
     }
 
-    setDebtForm(null);
+    onClose();
   };
 
   return (
     <Dialog
       initialFocus={nameInputRef}
-      open={Boolean(debtForm)}
+      open={Boolean(formState)}
       className="relative z-40"
-      onClose={() => setDebtForm(null)}
+      onClose={onClose}
     >
       <div
         className="fixed inset-0 bg-slate-900/30 backdrop-blur"
@@ -42,7 +43,7 @@ const DebtModal = () => {
         <div className="flex min-h-full items-center justify-center p-4">
           <Dialog.Panel className="mx-auto max-w-3xl rounded-lg bg-slate-950 shadow-md">
             <DebtForm
-              formState={debtForm}
+              formState={formState as DebtFormState}
               ref={nameInputRef}
               onSubmit={handleDebtSubmit}
             />

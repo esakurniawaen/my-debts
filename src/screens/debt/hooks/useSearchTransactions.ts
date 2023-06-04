@@ -1,7 +1,5 @@
-import { useAtomValue } from "jotai";
 import { useMemo } from "react";
 import { type Transaction } from "~/atoms/debtsAtom";
-import { noteQueryAtom } from "../atoms/noteQueryAtom";
 
 type UseSearchTransactionsReturnedProps =
   | {
@@ -14,10 +12,9 @@ type UseSearchTransactionsReturnedProps =
     };
 
 const useSearchTransactions = (
-  transactions: Transaction[]
+  transactions: Transaction[],
+  noteQuery: string
 ): UseSearchTransactionsReturnedProps => {
-  const noteQuery = useAtomValue(noteQueryAtom);
-
   const searchedTransactions = useMemo(
     () =>
       transactions.filter((transaction) => {
@@ -28,7 +25,8 @@ const useSearchTransactions = (
               .toLocaleLowerCase()
               .includes(noteQuery.toLocaleLowerCase())
           : transaction;
-      }), [transactions, noteQuery]
+      }),
+    [transactions, noteQuery]
   );
 
   return searchedTransactions.length === 0 && noteQuery !== ""

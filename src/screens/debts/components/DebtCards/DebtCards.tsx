@@ -1,16 +1,24 @@
-import { useAtomValue, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { deleteDebtAtom } from "~/atoms/debtsAtom";
 import Grid from "~/components/Grid";
-import { debtCategoriesToFilterAtom } from "~/screens/debts/atoms/debtCategoriesToFilterAtom";
-import { debtFormAtom } from "~/screens/debts/atoms/debtFormAtom";
 import useSearchDebts from "~/screens/debts/hooks/useSearchDebts";
 import useFilterDebts from "../../hooks/useFilterDebts";
+import type { DebtCategoriesToFilter } from "../DebtCardsWindow/DebtCardsFilter";
+import type { DebtFormState } from "../DebtModal/DebtForm/DebtForm";
 import DebtCard from "./DebtCard";
 
-const DebtCards = () => {
+interface DebtCardsProps {
+  nameQuery: string;
+  categoriesToFilter: DebtCategoriesToFilter;
+  onFormStateChange: (formState: DebtFormState) => void;
+}
+
+const DebtCards = ({
+  nameQuery,
+  onFormStateChange,
+  categoriesToFilter,
+}: DebtCardsProps) => {
   const deleteDebt = useSetAtom(deleteDebtAtom);
-  const { type } = useAtomValue(debtCategoriesToFilterAtom);
-  const setDebtForm = useSetAtom(debtFormAtom);
 
   const handleDeleteDebt = (debtId: string) => {
     const isProceed = confirm("Do you want to delete this debt permanently?");
@@ -19,9 +27,11 @@ const DebtCards = () => {
     deleteDebt(debtId);
   };
 
-  const filteredDebts = useFilterDebts();
-  const { searchedDebts, hasSearchedDebtsBeenFound } =
-    useSearchDebts(filteredDebts);
+  const filteredDebts = useFilterDebts(categoriesToFilter);
+  const { searchedDebts, hasSearchedDebtsBeenFound } = useSearchDebts(
+    filteredDebts,
+    nameQuery
+  );
 
   return (
     <>
@@ -29,14 +39,10 @@ const DebtCards = () => {
         <Grid>
           {searchedDebts.map((debt) => (
             <DebtCard
+              nameQuery={nameQuery}
               debt={debt}
               onDelete={() => handleDeleteDebt(debt.id)}
-              onEdit={() =>
-                setDebtForm({
-                  type: "EDIT",
-                  debt,
-                })
-              }
+              onEdit={() => onFormStateChange({ type: "EDIT", debt: debt })}
               key={debt.id}
             />
           ))}
@@ -44,7 +50,9 @@ const DebtCards = () => {
       ) : (
         <div className="rounded-lg border border-slate-900 px-4 py-3">
           <h3 className="text-center text-base font-semibold text-red-400">
-            {type === "LEND" ? "No Lends was Found" : "No Borrows was Found"}
+            {categoriesToFilter.type === "LEND"
+              ? "No Lends was Found"
+              : "No Borrows was Found"}
           </h3>
         </div>
       )}

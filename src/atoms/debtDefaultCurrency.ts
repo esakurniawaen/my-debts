@@ -1,6 +1,6 @@
-import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
-export const debtDefaultCurrencyAtom = atom<Currency>("USD");
+export const debtDefaultCurrencyAtom = atomWithStorage<Currency>('debt-default-currency', 'USD')
 
 export const CURRENCIES = [
   "AED",

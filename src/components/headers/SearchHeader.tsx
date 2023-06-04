@@ -26,7 +26,7 @@ const SearchHeader = ({
   search,
   RightColumn,
 }: SearchHeaderProps) => (
-  <header className="mb-4 flex w-full items-center justify-between px-4 py-3 shadow-lg backdrop-blur lg:px-6 lg:py-4">
+  <header className="mb-4 md:mb-5 lg:mb-6 flex w-full items-center justify-between px-4 py-3 shadow-lg backdrop-blur lg:px-6 lg:py-4">
     <div className="flex w-full max-w-xs items-center justify-center gap-2 md:gap-3 lg:gap-4">
       {LeftColumn}
       <SearchInput

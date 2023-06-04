@@ -1,6 +1,6 @@
 import type { Debt, Transaction } from "~/atoms/debtsAtom";
 import CurrencyText from "../CurrencyText";
-import type { Currency } from "~/atoms/debtDefaultCurrencyAtom";
+import type { Currency } from "~/atoms/debtDefaultCurrency";
 import useDebtAmounts from "../../hooks/useDebtAmounts";
 
 type DebtAmountsProps = {
@@ -57,7 +57,7 @@ const DebtAmounts = ({ type, currency, transactions }: DebtAmountsProps) => {
         )}
 
         {remainingToPay === 0 && (
-          <div className="rounded border border-blue-400 px-3 py-2 text-blue-400 ring ring-blue-500 ring-offset-1">
+          <div className="rounded-md border-2 border-blue-400 px-3 py-2 text-slate-300">
             PAID OFF
           </div>
         )}

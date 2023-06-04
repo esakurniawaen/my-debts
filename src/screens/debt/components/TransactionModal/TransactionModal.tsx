@@ -1,44 +1,43 @@
 import { Dialog } from "@headlessui/react";
 import clsx from "clsx";
-import { useAtom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { useRef } from "react";
 import type { Transaction } from "~/atoms/debtsAtom";
 import { addTransactionAtom, updateTransactionAtom } from "~/atoms/debtsAtom";
-import { transactionFormAtom } from "../../atoms/transactionFormAtom";
-import TransactionForm from "./TransactionForm";
-import {
-  capitalizeFirstWord,
-  convertConstantCaseToLowercaseSeperatedWithSpaces,
-} from "~/utils";
+import TransactionForm, { type TransactionFormState } from "./TransactionForm";
 
-const TransactionModal = () => {
+interface TransactionModalProps {
+  formState: TransactionFormState | null;
+  onClose: () => void;
+}
+
+const TransactionModal = ({ formState, onClose }: TransactionModalProps) => {
   const addTransaction = useSetAtom(addTransactionAtom);
   const updateTransaction = useSetAtom(updateTransactionAtom);
-  const [transactionForm, setTransactionForm] = useAtom(transactionFormAtom);
 
   const amountInputRef = useRef<HTMLInputElement | null>(null);
 
-  if (!transactionForm) return null;
-
   const handleTransactionSubmit = (transaction: Transaction) => {
-    if (transactionForm.type === "ADD") {
-      addTransaction(transactionForm.debtId, transaction);
+    if (!formState) return;
+
+    if (formState.type === "ADD") {
+      addTransaction(formState.debt.id, transaction);
     } else {
-      updateTransaction(transactionForm.debtId, transaction.id, transaction);
+      updateTransaction(formState.debt.id, transaction.id, transaction);
     }
 
-    setTransactionForm(null);
+    onClose();
   };
 
   const modalColor =
-    transactionForm.transaction.type === "DECREASE" ? "EMERALD" : "ROSE";
+    formState?.transaction.type === "DECREASE" ? "EMERALD" : "ROSE";
 
   return (
     <Dialog
       initialFocus={amountInputRef}
-      open={Boolean(transactionForm)}
+      open={Boolean(formState)}
       className="relative z-40"
-      onClose={() => setTransactionForm(null)}
+      onClose={onClose}
     >
       <div
         className="fixed inset-0 bg-black/30 backdrop-blur"
@@ -53,16 +52,18 @@ const TransactionModal = () => {
               "text-rose-500": modalColor === "ROSE",
             })}
           >
-            {capitalizeFirstWord(
-              convertConstantCaseToLowercaseSeperatedWithSpaces(
-                transactionForm.title
-              )
-            )}
+            {formState?.debt.type === "LEND"
+              ? formState?.transaction.type === "INCREASE"
+                ? "Lend More"
+                : "Collect"
+              : formState?.transaction.type === "INCREASE"
+              ? "Borrow More"
+              : "Pay"}
           </Dialog.Title>
           <TransactionForm
             ref={amountInputRef}
             onSubmit={handleTransactionSubmit}
-            formState={transactionForm}
+            formState={formState as TransactionFormState}
             formColor={modalColor}
           />
         </Dialog.Panel>

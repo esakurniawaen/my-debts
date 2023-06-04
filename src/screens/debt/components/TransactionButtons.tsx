@@ -1,26 +1,25 @@
 import { createId } from "@paralleldrive/cuid2";
-import { PrimaryButton, SecondaryButton } from "~/components/buttons";
 import { DateTime } from "luxon";
 import type { Debt } from "~/atoms/debtsAtom";
-import { useSetAtom } from "jotai";
-import { transactionFormAtom } from "../atoms/transactionFormAtom";
+import { PrimaryButton, SecondaryButton } from "~/components/buttons";
+import type { TransactionFormState } from "./TransactionModal/TransactionForm";
 
 interface TransactionButtonsProps {
-  debtType: Debt["type"];
-  debtId: string;
+  debt: Debt;
+  onFormStateChange: (formState: TransactionFormState) => void;
 }
 
-const TransactionButtons = ({ debtType, debtId }: TransactionButtonsProps) => {
-  const setTransactionForm = useSetAtom(transactionFormAtom);
-
+const TransactionButtons = ({
+  debt,
+  onFormStateChange,
+}: TransactionButtonsProps) => {
   return (
     <>
       <SecondaryButton
         onClick={() =>
-          setTransactionForm({
+          onFormStateChange({
             type: "ADD",
-            title: debtType === "LEND" ? "LEND_MORE" : "BORROW_MORE",
-            debtId,
+            debt,
             transaction: {
               type: "INCREASE",
               createdAt: DateTime.now().toMillis(),
@@ -32,14 +31,13 @@ const TransactionButtons = ({ debtType, debtId }: TransactionButtonsProps) => {
         }
         color="ROSE"
       >
-        {debtType === "LEND" ? "Lend more" : "Borrow more"}
+        {debt.type === "LEND" ? "Lend more" : "Borrow more"}
       </SecondaryButton>
       <PrimaryButton
         onClick={() =>
-          setTransactionForm({
+          onFormStateChange({
             type: "ADD",
-            title: debtType === "LEND" ? "COLLECT" : "PAY",
-            debtId,
+            debt,
             transaction: {
               type: "DECREASE",
               createdAt: DateTime.now().toMillis(),
@@ -51,7 +49,7 @@ const TransactionButtons = ({ debtType, debtId }: TransactionButtonsProps) => {
         }
         color="EMERALD"
       >
-        {debtType === "LEND" ? "Collect" : "Pay"}
+        {debt.type === "LEND" ? "Collect" : "Pay"}
       </PrimaryButton>
     </>
   );

@@ -1,16 +1,15 @@
-import { useAtomValue } from "jotai";
 import { useMemo } from "react";
 import { debtsAtom } from "~/atoms/debtsAtom";
-import { debtCategoriesToFilterAtom } from "../atoms/debtCategoriesToFilterAtom";
+import { type DebtCategoriesToFilter } from "../components/DebtCardsWindow/DebtCardsFilter";
+import { useAtomValue } from "jotai";
 
-const useFilterDebts = () => {
+const useFilterDebts = (categoriesToFilter: DebtCategoriesToFilter) => {
   const debts = useAtomValue(debtsAtom);
-  const debtCategoriesToFilter = useAtomValue(debtCategoriesToFilterAtom);
 
   return useMemo(
-    () => debts.filter((debt) => debt.type === debtCategoriesToFilter.type),
-    [debts, debtCategoriesToFilter.type]
+    () => debts.filter((debt) => debt.type === categoriesToFilter.type),
+    [debts, categoriesToFilter.type]
   );
 };
-
+   
 export default useFilterDebts;
