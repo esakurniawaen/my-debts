@@ -1,9 +1,9 @@
 import { Dialog } from "@headlessui/react";
-import { useSetAtom } from "jotai";
 import { useRef } from "react";
-import { addDebtAtom, updateDebtAtom, type Debt } from "~/atoms/debtsAtom";
+import { useDebtStore } from "~/store/debtStore";
+import type { Debt } from "~/types";
 import DebtForm from "./DebtForm";
-import type { DebtFormState } from "./DebtForm/DebtForm";
+import type { DebtFormState } from "../../types";
 
 interface DebtModalProps {
   formState: DebtFormState | null;
@@ -11,8 +11,8 @@ interface DebtModalProps {
 }
 
 const DebtModal = ({ formState, onClose }: DebtModalProps) => {
-  const addDebt = useSetAtom(addDebtAtom);
-  const updateDebt = useSetAtom(updateDebtAtom);
+  const { addDebt, updateDebt } = useDebtStore((state) => state);
+
   const nameInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleDebtSubmit = (debt: Debt) => {

@@ -1,9 +1,10 @@
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { useState, type ReactNode } from "react";
-import { type Debt } from "~/atoms/debtsAtom";
+import type { Debt } from "~/types";
 import Sidebar from "~/components/Sidebar";
 import { IconButton } from "~/components/buttons";
 import { SearchHeader } from "~/components/headers";
+import ClientOnly from "~/components/ClientOnly";
 
 type DebtsLayoutProps = {
   children: ReactNode;
@@ -21,7 +22,7 @@ export default function DebtsLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <>
+    <ClientOnly>
       <SearchHeader
         searchInputColorWhenFocused={
           typeToFilter === "LEND" ? "YELLOW" : "LIME"
@@ -45,6 +46,6 @@ export default function DebtsLayout({
       <Sidebar open={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {children}
-    </>
+    </ClientOnly>
   );
 }

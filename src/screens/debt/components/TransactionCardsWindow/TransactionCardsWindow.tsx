@@ -1,11 +1,9 @@
 import type { ReactElement } from "react";
-import type { Transaction } from "~/atoms/debtsAtom";
-import TransactionCardsControls from "./TransactionCardsControls";
+import ExcludeModeButton from "./ExcludeModeButton";
 
 interface TransactionCardsWindowProps {
   children: ReactElement;
   debtId: string;
-  transactions: Transaction[];
   excludeMode: boolean;
   onExcludeModeChange: (excludeMode: boolean) => void;
 }
@@ -13,7 +11,6 @@ interface TransactionCardsWindowProps {
 const TransactionCardsWindow = ({
   children,
   debtId,
-  transactions,
   excludeMode,
   onExcludeModeChange,
 }: TransactionCardsWindowProps) => {
@@ -21,13 +18,14 @@ const TransactionCardsWindow = ({
     <section className="mt-4">
       <h2 className="sr-only">List of transaction</h2>
       <section className="mb-4">
-        <h3 className="sr-only">Controls of transaction list</h3>
-        <TransactionCardsControls
-          excludeMode={excludeMode}
-          onExcludeModeChange={onExcludeModeChange}
-          transactions={transactions}
-          debtId={debtId}
-        />
+        <h3 className="sr-only">DebtTransaction list controls</h3>
+        <div className="flex justify-end">
+          <ExcludeModeButton
+            excludeMode={excludeMode}
+            onExcludeModeChange={onExcludeModeChange}
+            debtId={debtId}
+          />
+        </div>
       </section>
       <section className="mb-20 lg:mb-4">
         <h3 className="sr-only">Transactions</h3>

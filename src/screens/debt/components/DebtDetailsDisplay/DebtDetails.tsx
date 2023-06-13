@@ -1,7 +1,7 @@
 import { Popover } from "@headlessui/react";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import { DateTime } from "luxon";
-import type { Currency } from "~/atoms/debtDefaultCurrency";
+import type { Currency } from "~/types";
 import { toDatetimeLocal, toLocaleString } from "~/utils";
 import Image from "next/image";
 

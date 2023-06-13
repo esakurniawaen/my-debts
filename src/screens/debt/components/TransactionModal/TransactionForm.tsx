@@ -1,20 +1,14 @@
-import { type FormEvent, forwardRef } from "react";
+import { forwardRef, type FormEvent } from "react";
 import { useMap } from "react-use";
 import Label from "~/components/Label";
 import { PrimaryButton } from "~/components/buttons";
 import { Input, MoneyInput } from "~/components/inputs";
+import type { NoninitialDebtTransaction } from "~/types";
 import { fromDatetimeLocal, toDatetimeLocal } from "~/utils";
-import type { TransactionColor } from "../../types";
-import type { Debt, NoninitialTransaction } from "~/atoms/debtsAtom";
-
-export type TransactionFormState = {
-  type: "ADD" | "EDIT";
-  debt: Debt;
-  transaction: NoninitialTransaction;
-};
+import type { TransactionColor, TransactionFormState } from "../../types";
 
 interface TransactionFormProps {
-  onSubmit: (transaction: NoninitialTransaction) => void;
+  onSubmit: (transaction: NoninitialDebtTransaction) => void;
   formState: TransactionFormState;
   formColor: TransactionColor;
 }

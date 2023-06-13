@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import { Input } from "~/components/inputs";
-import type { Debt } from "~/atoms/debtsAtom";
+import type { Debt } from "~/types";
 import { capitalizeWords } from "~/utils";
 import Label from "~/components/Label";
 import type { DebtColor } from "../../../types";

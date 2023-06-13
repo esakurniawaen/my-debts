@@ -1,6 +1,24 @@
-import { atomWithStorage } from "jotai/utils";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import type { Currency } from "~/types";
 
-export const debtDefaultCurrencyAtom = atomWithStorage<Currency>('debt-default-currency', 'USD')
+interface CurrencyState {
+  defaultCurrency: Currency;
+  setDefaultCurrency: (currency: Currency) => void;
+}
+
+export const useDefaultCurrencyStore = create<CurrencyState>()(
+  persist(
+    (set) => ({
+      defaultCurrency: "USD",
+      setDefaultCurrency: (currency) =>
+        set(() => ({ defaultCurrency: currency })),
+    }),
+    {
+      name: "default-currency",
+    }
+  )
+);
 
 export const CURRENCIES = [
   "AED",
@@ -160,5 +178,3 @@ export const CURRENCIES = [
   "ZMK",
   "ZWR",
 ] as const;
-
-export type Currency = (typeof CURRENCIES)[number];

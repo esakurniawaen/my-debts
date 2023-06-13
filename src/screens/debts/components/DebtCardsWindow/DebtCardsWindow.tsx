@@ -1,16 +1,15 @@
-import type { ReactNode } from "react";
-import FilterByDebtTypeButtons from "./FilterByDebtTypeButtons";
-import DebtCardsFilter, {
-  type DebtCategoriesToFilter,
-} from "./DebtCardsFilter";
-import { type DebtFormState } from "../DebtModal/DebtForm/DebtForm";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { PrimaryButton } from "~/components/buttons";
 import { createId } from "@paralleldrive/cuid2";
 import { DateTime } from "luxon";
-import { useAtomValue } from "jotai";
-import { debtDefaultCurrencyAtom } from "~/atoms/debtDefaultCurrency";
-import DebtCardsSorter, { type SortDebtsBy } from "./DebtCardsSorter";
+import type { ReactNode } from "react";
+import { PrimaryButton } from "~/components/buttons";
+import { useDefaultCurrencyStore } from "~/store/defaultCurrencyStore";
+import FilterByDebtTypeButtons from "./FilterByDebtTypeButtons";
+import type {
+  DebtCategoriesToFilter,
+  DebtFormState,
+  SortDebtsBy,
+} from "../../types";
 
 interface DebtCardsWindowProps {
   children: ReactNode;
@@ -33,7 +32,9 @@ const DebtCardsWindow = ({
 }: DebtCardsWindowProps) => {
   const color = categoriesToFilter.type === "LEND" ? "YELLOW" : "LIME";
 
-  const defaultCurrency = useAtomValue(debtDefaultCurrencyAtom);
+  const { defaultCurrency, setDefaultCurrency } = useDefaultCurrencyStore(
+    (state) => state
+  );
 
   return (
     <>

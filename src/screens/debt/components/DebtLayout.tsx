@@ -1,11 +1,12 @@
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import type { ReactNode } from "react";
-import type { Debt } from "~/atoms/debtsAtom";
+import type { Debt } from "~/types";
 import { IconButton } from "~/components/buttons";
 import { SearchHeader } from "~/components/headers";
 import TransactionButtons from "./TransactionButtons";
-import { type TransactionFormState } from "./TransactionModal/TransactionForm";
+import ClientOnly from "~/components/ClientOnly";
+import type { TransactionFormState } from "../types";
 
 type DebtLayoutProps = {
   children: ReactNode;
@@ -20,12 +21,12 @@ export default function DebtLayout({
   debt,
   noteQuery,
   onNoteQueryChange,
-  onFormStateChange
+  onFormStateChange,
 }: DebtLayoutProps) {
   const router = useRouter();
 
   return (
-    <>
+    <ClientOnly>
       <SearchHeader
         LeftColumn={
           <IconButton
@@ -41,12 +42,15 @@ export default function DebtLayout({
         searchPlaceholder="Search transactions..."
         RightColumn={
           <div className="hidden items-center gap-x-3 lg:flex">
-            <TransactionButtons debt={debt} onFormStateChange={onFormStateChange} />
+            <TransactionButtons
+              debt={debt}
+              onFormStateChange={onFormStateChange}
+            />
           </div>
         }
       />
 
       {children}
-    </>
+    </ClientOnly>
   );
 }

@@ -1,10 +1,10 @@
 import { Dialog } from "@headlessui/react";
 import clsx from "clsx";
-import { useSetAtom } from "jotai";
 import { useRef } from "react";
-import type { Transaction } from "~/atoms/debtsAtom";
-import { addTransactionAtom, updateTransactionAtom } from "~/atoms/debtsAtom";
-import TransactionForm, { type TransactionFormState } from "./TransactionForm";
+import { useDebtStore } from "~/store/debtStore";
+import type { NoninitialDebtTransaction } from "~/types";
+import TransactionForm from "./TransactionForm";
+import type { TransactionFormState } from "../../types";
 
 interface TransactionModalProps {
   formState: TransactionFormState | null;
@@ -12,18 +12,19 @@ interface TransactionModalProps {
 }
 
 const TransactionModal = ({ formState, onClose }: TransactionModalProps) => {
-  const addTransaction = useSetAtom(addTransactionAtom);
-  const updateTransaction = useSetAtom(updateTransactionAtom);
+  const { addDebtTransaction, updateDebtTransaction } = useDebtStore(
+    (state) => state
+  );
 
   const amountInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleTransactionSubmit = (transaction: Transaction) => {
+  const handleTransactionSubmit = (transaction: NoninitialDebtTransaction) => {
     if (!formState) return;
 
     if (formState.type === "ADD") {
-      addTransaction(formState.debt.id, transaction);
+      addDebtTransaction(formState.debt.id, transaction);
     } else {
-      updateTransaction(formState.debt.id, transaction.id, transaction);
+      updateDebtTransaction(formState.debt.id, transaction.id, transaction);
     }
 
     onClose();

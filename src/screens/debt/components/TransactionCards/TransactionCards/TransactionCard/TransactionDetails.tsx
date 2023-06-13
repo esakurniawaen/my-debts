@@ -1,11 +1,12 @@
 import clsx from "clsx";
 import { DateTime } from "luxon";
-import type { NoninitialTransaction } from "~/atoms/debtsAtom";
+import Highlighter from "react-highlight-words";
 import ReadMoreReadLess from "~/components/ReadMoreReadLess";
+import type { NoninitialDebtTransaction } from "~/types";
 import { toDatetimeLocal, toLocaleString } from "~/utils";
 
 type TransactionDetailsProps = {
-  transaction: NoninitialTransaction;
+  transaction: NoninitialDebtTransaction;
   noteQuery: string;
 };
 
@@ -30,9 +31,19 @@ export default function TransactionDetails({
       {transaction.note && (
         <li>
           Note: {""}
-          <ReadMoreReadLess alwaysFullTextWhen={noteQuery !== ""}>
-            {transaction.note}
-          </ReadMoreReadLess>
+          {noteQuery === "" ? (
+            <ReadMoreReadLess>{transaction.note}</ReadMoreReadLess>
+          ) : (
+            <Highlighter
+              highlightClassName={clsx("bg-slate-800 rounded", {
+                "text-emerald-400": transaction.type === "DECREASE",
+                "text-rose-400": transaction.type === "INCREASE",
+              })}
+              className="inline"
+              searchWords={[noteQuery]}
+              textToHighlight={transaction.note}
+            />
+          )}
         </li>
       )}
     </ul>

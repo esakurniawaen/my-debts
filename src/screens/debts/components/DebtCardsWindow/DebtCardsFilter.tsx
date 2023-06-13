@@ -1,15 +1,8 @@
 import { Popover } from "@headlessui/react";
 import { FunnelIcon } from "@heroicons/react/24/outline";
-import { type Debt } from "~/atoms/debtsAtom";
 import { SecondaryButton } from "~/components/buttons";
 import { RadioOptions } from "~/components/inputs";
-import { type DebtColor } from "../../types";
-
-export type DebtCategoriesToFilter = {
-  type: Debt["type"];
-  date: "ACTIVE" | "DUE";
-  payment: "ACTIVE" | "PAID_OFF";
-};
+import type { DebtCategoriesToFilter, DebtColor } from "../../types";
 
 interface DebtCardsFilterProps {
   radioColorWhenSelected: DebtColor;

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import type { Transaction } from "~/atoms/debtsAtom";
+import type { DebtTransaction } from "~/types";
 
-const useDebtAmounts = (transactions: Transaction[]) => {
+const useDebtAmounts = (transactions: DebtTransaction[]) => {
   const totalPaid = useMemo(
     () =>
       transactions.reduce((prevValue, { exclude, amount, type }) => {

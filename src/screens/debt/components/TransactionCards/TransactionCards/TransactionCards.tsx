@@ -1,16 +1,11 @@
-import { useSetAtom } from "jotai";
 import { useState } from "react";
-import {
-  deleteTransactionAtom,
-  updateTransactionAtom,
-  type Debt,
-  type NoninitialTransaction,
-} from "~/atoms/debtsAtom";
 import Grid from "~/components/Grid";
+import { useDebtStore } from "~/store/debtStore";
+import type { Debt, NoninitialDebtTransaction } from "~/types";
 import useSearchTransactions from "../../../hooks/useSearchTransactions";
 import TransactionCardsWindow from "../../TransactionCardsWindow/TransactionCardsWindow";
-import { type TransactionFormState } from "../../TransactionModal/TransactionForm";
 import TransactionCard from "./TransactionCard/TransactionCard";
+import type { TransactionFormState } from "../../../types";
 
 interface TransactionCardsProps {
   debt: Debt;
@@ -23,8 +18,9 @@ const TransactionCards = ({
   noteQuery,
   onFormStateChange,
 }: TransactionCardsProps) => {
-  const deleteTransaction = useSetAtom(deleteTransactionAtom);
-  const updateTransaction = useSetAtom(updateTransactionAtom);
+  const { toggleDebtTransactionExclude, deleteDebtTransaction } = useDebtStore(
+    (state) => state
+  );
 
   const [excludeMode, setExcludeMode] = useState(false);
 
@@ -32,7 +28,7 @@ const TransactionCards = ({
     const proceed = confirm("Delete transaction forever?");
     if (!proceed) return;
 
-    deleteTransaction(debt.id, transactionId);
+    deleteDebtTransaction(debt.id, transactionId);
   };
 
   const { searchedTransactions, hasSearchedTransactionsBeenFound } =
@@ -41,7 +37,6 @@ const TransactionCards = ({
   return (
     <TransactionCardsWindow
       debtId={debt.id}
-      transactions={debt.transactions}
       excludeMode={excludeMode}
       onExcludeModeChange={setExcludeMode}
     >
@@ -59,13 +54,11 @@ const TransactionCards = ({
                 onFormStateChange({
                   type: "EDIT",
                   debt: debt,
-                  transaction: transaction as NoninitialTransaction,
+                  transaction: transaction as NoninitialDebtTransaction,
                 })
               }
               onExcludeToggle={() =>
-                updateTransaction(debt.id, transaction.id, {
-                  exclude: !transaction.exclude,
-                })
+                toggleDebtTransactionExclude(debt.id, transaction.id)
               }
             />
           ))}

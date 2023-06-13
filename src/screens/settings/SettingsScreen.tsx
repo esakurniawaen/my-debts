@@ -1,20 +1,25 @@
+import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
 import { IconButton } from "~/components/buttons";
 import { TitleHeader } from "~/components/headers";
 import { Combobox } from "~/components/selects";
-import { useRouter } from "next/router";
-import SettingListItem from "./components/SettingListItem";
-import { ChevronLeftIcon } from "@heroicons/react/24/outline";
-import { useAtom } from "jotai";
+import useStore from "~/store/kontol";
 import {
-  debtDefaultCurrencyAtom,
   CURRENCIES,
-} from "~/atoms/debtDefaultCurrency";
+  useDefaultCurrencyStore,
+} from "~/store/defaultCurrencyStore";
+import SettingListItem from "./components/SettingListItem";
 
 const SettingsScreen = () => {
   const router = useRouter();
 
-  const [debtDefaultCurrency, setDebtDefaultCurrency] = useAtom(
-    debtDefaultCurrencyAtom
+  const defaultCurrency = useStore(
+    useDefaultCurrencyStore,
+    (state) => state.defaultCurrency
+  );
+  const setDefaultCurrency = useStore(
+    useDefaultCurrencyStore,
+    (state) => state.setDefaultCurrency
   );
 
   return (
@@ -42,9 +47,9 @@ const SettingsScreen = () => {
               <div className="w-24">
                 <Combobox
                   options={CURRENCIES}
-                  selectedOption={debtDefaultCurrency}
+                  selectedOption={defaultCurrency ?? "USD"}
                   onSelectedOptionChange={(currency) =>
-                    setDebtDefaultCurrency(currency)
+                    setDefaultCurrency?.(currency)
                   }
                 />
               </div>

@@ -1,6 +1,5 @@
 import { Fragment, type HTMLAttributes, type ReactHTML } from "react";
-import { useMountedState } from "react-use";
-
+import { useIsClient } from "usehooks-ts";
 interface ClientOnlyProps extends HTMLAttributes<HTMLElement> {
   as?: keyof ReactHTML;
 }
@@ -13,8 +12,7 @@ const ClientOnly = ({
 }: ClientOnlyProps) => {
   const Tag = as || Fragment;
 
-  const isClient = useMountedState();
-
+  const isClient = useIsClient();
   if (!isClient) return null;
 
   return <Tag {...restProps}>{children}</Tag>;

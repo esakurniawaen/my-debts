@@ -2,16 +2,11 @@ import { Popover } from "@headlessui/react";
 import { ArrowsUpDownIcon } from "@heroicons/react/24/outline";
 import { SecondaryButton } from "~/components/buttons";
 import { RadioOptions } from "~/components/inputs";
-import type { DebtColor } from "../../types";
-import { type DebtCategoriesToFilter } from "./DebtCardsFilter";
-
-export type SortDebtsBy =
-  | "NEWEST"
-  | "OLDEST"
-  | "ASCENDING"
-  | "DESCENDING"
-  | "HIGHEST_REMAINING_PAYMENT"
-  | "LOWEST_REMAINING_PAYMENT";
+import type {
+  DebtCategoriesToFilter,
+  DebtColor,
+  SortDebtsBy,
+} from "../../types";
 
 type DebtCardsSorterProps = {
   radioColorWhenSelected: DebtColor;

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import type { Debt } from "~/atoms/debtsAtom";
+import type { Debt } from "~/types";
 
 interface FilterByDebtTypeButtonsProps {
   typeToFilter: Debt["type"];

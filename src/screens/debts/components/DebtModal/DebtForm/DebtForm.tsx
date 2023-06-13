@@ -1,17 +1,14 @@
-import { forwardRef,  type FormEvent } from "react";
+import { forwardRef, type FormEvent } from "react";
 import { useMap } from "react-use";
-import type { Debt } from "~/atoms/debtsAtom";
+import type { Debt } from "~/types";
 import Label from "~/components/Label";
 import { PrimaryButton } from "~/components/buttons";
 import { Input } from "~/components/inputs";
 import DateInputs from "./DateInputs";
 import DebtDetailInputs from "./DebtDetailInputs";
 import PersonDetailInputs from "./PersonDetailInputs";
+import type { DebtFormState } from "~/screens/debts/types";
 
-export type DebtFormState = {
-  type: "ADD" | "EDIT";
-  debt: Debt;
-};
 interface DebtFormProps {
   formState: DebtFormState;
   onSubmit: (debt: Debt) => void;
@@ -30,7 +27,7 @@ const DebtForm = forwardRef<HTMLInputElement, DebtFormProps>(
       !debtPreview.transactions[0]?.amount || debtPreview.personName === "";
 
     const formColor = debtPreview.type === "LEND" ? "YELLOW" : "LIME";
-    
+
     return (
       <form
         onSubmit={handleDebtSubmit}

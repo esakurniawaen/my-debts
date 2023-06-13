@@ -1,12 +1,11 @@
-import type { Debt, Transaction } from "~/atoms/debtsAtom";
+import type { Debt, Currency, DebtTransaction } from "~/types";
 import CurrencyText from "../CurrencyText";
-import type { Currency } from "~/atoms/debtDefaultCurrency";
 import useDebtAmounts from "../../hooks/useDebtAmounts";
 
 type DebtAmountsProps = {
   type: Debt["type"];
   currency: Currency;
-  transactions: Transaction[];
+  transactions: DebtTransaction[];
 };
 
 const DebtAmounts = ({ type, currency, transactions }: DebtAmountsProps) => {

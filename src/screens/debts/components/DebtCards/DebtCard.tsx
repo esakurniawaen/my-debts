@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { DateTime } from "luxon";
 import Link from "next/link";
 import Highlighter from "react-highlight-words";
-import type { Debt } from "~/atoms/debtsAtom";
+import type { Debt } from "~/types";
 import CardMenu from "~/components/selects/CardMenu";
 import { toDatetimeLocal, toLocaleString } from "~/utils";
 
@@ -35,13 +35,10 @@ const DebtCard = ({ nameQuery, debt, onDelete, onEdit }: DebtCardProps) => {
         </Link>
 
         <ul
-          className={clsx(
-            "mt-1 grid list-inside list-[circle] gap-0.5",
-            {
-              "marker:text-yellow-400": cardColor === "YELLOW",
-              "marker:text-lime-400": cardColor === "LIME",
-            }
-          )}
+          className={clsx("mt-1 grid list-inside list-[circle] gap-0.5", {
+            "marker:text-yellow-400": cardColor === "YELLOW",
+            "marker:text-lime-400": cardColor === "LIME",
+          })}
         >
           <li>Currency: {debt.currency}</li>
           <li>

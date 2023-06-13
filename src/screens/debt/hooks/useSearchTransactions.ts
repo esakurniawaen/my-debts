@@ -1,31 +1,32 @@
 import { useMemo } from "react";
-import { type Transaction } from "~/atoms/debtsAtom";
+import { type DebtTransaction } from "~/types";
 
-type UseSearchTransactionsReturnedProps =
+type UseSearchTransactionsByNoteReturnedProps =
   | {
       searchedTransactions: never[];
       hasSearchedTransactionsBeenFound: false;
     }
   | {
-      searchedTransactions: Transaction[];
+      searchedTransactions: DebtTransaction[];
       hasSearchedTransactionsBeenFound: true;
     };
 
-const useSearchTransactions = (
-  transactions: Transaction[],
+const useSearchTransactionsByNote = (
+  transactions: DebtTransaction[],
   noteQuery: string
-): UseSearchTransactionsReturnedProps => {
+): UseSearchTransactionsByNoteReturnedProps => {
   const searchedTransactions = useMemo(
     () =>
-      transactions.filter((transaction) => {
-        if (transaction.type === "INITIAL") return transaction;
-
-        return transaction.note
-          ? transaction.note
-              .toLocaleLowerCase()
-              .includes(noteQuery.toLocaleLowerCase())
-          : transaction;
-      }),
+      noteQuery !== ""
+        ? transactions.filter((transaction) => {
+            if (transaction.type !== "INITIAL") {
+              if (transaction.note)
+                return transaction.note
+                  .toLocaleLowerCase()
+                  .includes(noteQuery.toLocaleLowerCase());
+            }
+          })
+        : transactions,
     [transactions, noteQuery]
   );
 
@@ -40,4 +41,4 @@ const useSearchTransactions = (
       };
 };
 
-export default useSearchTransactions;
+export default useSearchTransactionsByNote;

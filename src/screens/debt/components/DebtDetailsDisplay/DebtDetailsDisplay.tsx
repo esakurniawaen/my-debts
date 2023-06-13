@@ -1,4 +1,4 @@
-import type { Debt } from "~/atoms/debtsAtom";
+import type { Debt } from "~/types";
 import DebtAmounts from "./DebtAmounts";
 import DebtDetails from "./DebtDetails";
 

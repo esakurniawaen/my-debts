@@ -1,6 +1,5 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
-import { useEffectOnce, useUpdateEffect } from "react-use";
 
 interface ReadMoreReadLessProps {
   children: string;
@@ -11,28 +10,19 @@ interface ReadMoreReadLessProps {
 const ReadMoreReadLess = ({
   children,
   charLimit = 150,
-  alwaysFullTextWhen = false,
 }: ReadMoreReadLessProps) => {
   const [isFullText, setIsFullText] = useState(children.length < charLimit);
-
-  useEffectOnce(() => {
-    if (alwaysFullTextWhen) {
-      setIsFullText(true);
-    }
-  });
-
-  useUpdateEffect(() => {
-    setIsFullText(alwaysFullTextWhen);
-  }, [alwaysFullTextWhen]);
 
   const toggleFullText = () => {
     setIsFullText((prev) => !prev);
   };
 
+  const textExceedsTheLimit = children.length > charLimit;
+
   return (
-    <div className="inline ">
+    <div className="inline">
       {isFullText ? children : `${children.substr(0, charLimit)}...`}{" "}
-      {children.length > charLimit && (
+      {textExceedsTheLimit && (
         <button
           className="inline-flex items-center justify-center text-blue-400"
           onClick={toggleFullText}

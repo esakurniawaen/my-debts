@@ -1,8 +1,8 @@
 import { createId } from "@paralleldrive/cuid2";
 import { DateTime } from "luxon";
-import type { Debt } from "~/atoms/debtsAtom";
+import type { Debt } from "~/types";
 import { PrimaryButton, SecondaryButton } from "~/components/buttons";
-import type { TransactionFormState } from "./TransactionModal/TransactionForm";
+import type { TransactionFormState } from "../types";
 
 interface TransactionButtonsProps {
   debt: Debt;

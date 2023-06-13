@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { useLocalStorage } from "react-use";
+import { useLocalStorage } from "usehooks-ts";
 import DebtCards from "./components/DebtCards";
-import type { DebtCategoriesToFilter } from "./components/DebtCardsWindow/DebtCardsFilter";
-import type { SortDebtsBy } from "./components/DebtCardsWindow/DebtCardsSorter";
 import DebtCardsWindow from "./components/DebtCardsWindow/DebtCardsWindow";
 import DebtModal from "./components/DebtModal";
-import type { DebtFormState } from "./components/DebtModal/DebtForm/DebtForm";
 import DebtsLayout from "./components/DebtsLayout";
+import type {
+  DebtCategoriesToFilter,
+  DebtFormState,
+  SortDebtsBy,
+} from "./types";
 
 const DebtsScreen = () => {
   const [categoriesToFilter, setCategoriesToFilter] =
@@ -18,8 +20,6 @@ const DebtsScreen = () => {
   const [nameQuery, setNameQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortDebtsBy>("NEWEST");
   const [formState, setFormState] = useState<DebtFormState | null>(null);
-
-  if (!categoriesToFilter) return null;
 
   return (
     <DebtsLayout

@@ -1,10 +1,8 @@
-import { useSetAtom } from "jotai";
-import { deleteDebtAtom } from "~/atoms/debtsAtom";
 import Grid from "~/components/Grid";
 import useSearchDebts from "~/screens/debts/hooks/useSearchDebts";
+import { useDebtStore } from "~/store/debtStore";
 import useFilterDebts from "../../hooks/useFilterDebts";
-import type { DebtCategoriesToFilter } from "../DebtCardsWindow/DebtCardsFilter";
-import type { DebtFormState } from "../DebtModal/DebtForm/DebtForm";
+import type { DebtCategoriesToFilter, DebtFormState } from "../../types";
 import DebtCard from "./DebtCard";
 
 interface DebtCardsProps {
@@ -18,7 +16,7 @@ const DebtCards = ({
   onFormStateChange,
   categoriesToFilter,
 }: DebtCardsProps) => {
-  const deleteDebt = useSetAtom(deleteDebtAtom);
+  const { debts, deleteDebt } = useDebtStore((state) => state);
 
   const handleDeleteDebt = (debtId: string) => {
     const isProceed = confirm("Do you want to delete this debt permanently?");
@@ -27,7 +25,7 @@ const DebtCards = ({
     deleteDebt(debtId);
   };
 
-  const filteredDebts = useFilterDebts(categoriesToFilter);
+  const filteredDebts = useFilterDebts(debts, categoriesToFilter);
   const { searchedDebts, hasSearchedDebtsBeenFound } = useSearchDebts(
     filteredDebts,
     nameQuery

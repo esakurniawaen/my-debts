@@ -1,42 +1,29 @@
-import { useSetAtom } from "jotai";
-import { updateAllTransactionsAtom, type Transaction } from "~/atoms/debtsAtom";
-import { SecondaryButton } from "~/components/buttons";
 import { useEffect } from "react";
+import { SecondaryButton } from "~/components/buttons";
+import { useDebtStore } from "~/store/debtStore";
 
-type TransactionCardsControlsProps = {
-  transactions: Transaction[];
+type ExcludeModeButtonProps = {
   debtId: string;
   excludeMode: boolean;
   onExcludeModeChange: (excludeMode: boolean) => void;
 };
 
-export default function TransactionCardsControls({
-  transactions,
+export default function ExcludeModeButton({
   debtId,
   excludeMode,
   onExcludeModeChange,
-}: TransactionCardsControlsProps) {
-  const updateAllTransactions = useSetAtom(updateAllTransactionsAtom);
+}: ExcludeModeButtonProps) {
+  const unexcludeAllDebtTransactions = useDebtStore(
+    (state) => state.unexcludeAllDebtTransactions
+  );
 
-  const handleUnexcludeAllTransactions = () => {
-    updateAllTransactions(
-      debtId,
-      transactions.map((transaction) =>
-        transaction.exclude ? { ...transaction, exclude: false } : transaction
-      )
-    );
-
+  const handleCloseExcludeModeClick = () => {
+    unexcludeAllDebtTransactions(debtId);
     onExcludeModeChange(false);
   };
 
   useEffect(() => {
-    return () =>
-      updateAllTransactions(
-        debtId,
-        transactions.map((transaction) =>
-          transaction.exclude ? { ...transaction, exclude: false } : transaction
-        )
-      );
+    return () => unexcludeAllDebtTransactions(debtId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -44,7 +31,7 @@ export default function TransactionCardsControls({
     <div className="flex justify-end">
       {excludeMode ? (
         <SecondaryButton
-          onClick={handleUnexcludeAllTransactions}
+          onClick={handleCloseExcludeModeClick}
           size="SMALL"
           data-tooltip-id="tooltip"
           data-tooltip-content="And unexclude all transaction(s)"

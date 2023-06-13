@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { type Debt } from "~/atoms/debtsAtom";
+import type { Debt } from "~/types";
 
-type UseSearchDebtsReturnedProps =
+type UseSearchDebtsByNameReturnedProps =
   | {
       searchedDebts: never[];
       hasSearchedDebtsBeenFound: false;
@@ -11,17 +11,19 @@ type UseSearchDebtsReturnedProps =
       hasSearchedDebtsBeenFound: true;
     };
 
-const useSearchDebts = (
+const useSearchDebtsByName = (
   debts: Debt[],
   nameQuery: string
-): UseSearchDebtsReturnedProps => {
+): UseSearchDebtsByNameReturnedProps => {
   const searchedDebts = useMemo(
     () =>
-      debts.filter((debt) =>
-        debt.personName
-          .toLocaleLowerCase()
-          .includes(nameQuery.toLocaleLowerCase())
-      ),
+      nameQuery !== ""
+        ? debts.filter((debt) =>
+            debt.personName
+              .toLocaleLowerCase()
+              .includes(nameQuery.toLocaleLowerCase())
+          )
+        : debts,
     [debts, nameQuery]
   );
 
@@ -33,4 +35,4 @@ const useSearchDebts = (
       };
 };
 
-export default useSearchDebts;
+export default useSearchDebtsByName;

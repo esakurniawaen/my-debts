@@ -1,5 +1,5 @@
-import { CURRENCIES } from "~/atoms/debtDefaultCurrency";
-import { type Debt } from "~/atoms/debtsAtom";
+import { CURRENCIES } from "~/store/defaultCurrencyStore";
+import type { Debt } from "~/types";
 import Label from "~/components/Label";
 import { MoneyInput, RadioOptions } from "~/components/inputs";
 import Combobox from "~/components/selects/Combobox";

@@ -1,13 +1,12 @@
 import clsx from "clsx";
-import { type Currency } from "~/atoms/debtDefaultCurrency";
-import { type Transaction } from "~/atoms/debtsAtom";
 import CardMenu from "~/components/selects/CardMenu";
 import CurrencyText from "../../../CurrencyText";
 import ExcludeTransactionCheckbox from "./ExcludeTransactionCheckbox";
 import TransactionDetails from "./TransactionDetails";
+import type { Currency, DebtTransaction } from "~/types";
 
 interface TransactionCardProps {
-  transaction: Transaction;
+  transaction: DebtTransaction;
   debtCurrency: Currency;
   noteQuery: string;
   onEdit: () => void;

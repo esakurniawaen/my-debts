@@ -1,7 +1,7 @@
-import { type Debt } from "~/atoms/debtsAtom";
+import type { Debt } from "~/types";
 import { useMemo } from "react";
-import type { SortDebtsBy } from "../components/DebtCardsWindow/DebtCardsSorter";
 import { DateTime } from "luxon";
+import type { SortDebtsBy } from "../types";
 
 // NOTE make this word as expected, just read the variable names and you'll undestand what do i expected.
 
