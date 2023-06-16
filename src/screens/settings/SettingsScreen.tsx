@@ -3,27 +3,22 @@ import { useRouter } from "next/router";
 import { IconButton } from "~/components/buttons";
 import { TitleHeader } from "~/components/headers";
 import { Combobox } from "~/components/selects";
-import useStore from "~/store/kontol";
 import {
   CURRENCIES,
   useDefaultCurrencyStore,
 } from "~/store/defaultCurrencyStore";
 import SettingListItem from "./components/SettingListItem";
+import ClientOnly from "~/components/ClientOnly";
 
 const SettingsScreen = () => {
   const router = useRouter();
 
-  const defaultCurrency = useStore(
-    useDefaultCurrencyStore,
-    (state) => state.defaultCurrency
-  );
-  const setDefaultCurrency = useStore(
-    useDefaultCurrencyStore,
-    (state) => state.setDefaultCurrency
+  const { defaultCurrency, setDefaultCurrency } = useDefaultCurrencyStore(
+    (state) => state
   );
 
   return (
-    <>
+    <ClientOnly>
       <TitleHeader
         title="Settings"
         titleAs="h1"
@@ -49,7 +44,7 @@ const SettingsScreen = () => {
                   options={CURRENCIES}
                   selectedOption={defaultCurrency ?? "USD"}
                   onSelectedOptionChange={(currency) =>
-                    setDefaultCurrency?.(currency)
+                    setDefaultCurrency(currency)
                   }
                 />
               </div>
@@ -57,7 +52,7 @@ const SettingsScreen = () => {
           />
         </ul>
       </main>
-    </>
+    </ClientOnly>
   );
 };
 
